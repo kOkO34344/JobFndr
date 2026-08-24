@@ -1,0 +1,589 @@
+/* ===========================================================================
+   Panels — the raised machined surface everything else sits on.
+   =========================================================================== */
+.panel {
+  background: linear-gradient(150deg, var(--panel-raised), var(--panel));
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-raised);
+  border: 1px solid var(--hairline);
+}
+
+.panel--well {
+  background: var(--panel-well);
+  box-shadow: var(--shadow-well);
+  border-color: transparent;
+}
+
+.panel--flush { box-shadow: none; border-color: var(--hairline); }
+
+.panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.panel__body { padding: 22px; }
+
+/* ===========================================================================
+   Glass buttons — a lit pane over the machined surface.
+   =========================================================================== */
+.btn {
+  --btn-tint: rgba(255, 255, 255, 0.07);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 11px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--r-md);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.02) 46%),
+    var(--btn-tint);
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+  box-shadow:
+    var(--shadow-raised),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.16s var(--ease), box-shadow 0.16s var(--ease),
+              background 0.16s var(--ease);
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-raised-lg), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+/* The press is the whole point of the aesthetic: the control goes in. */
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: var(--shadow-pressed);
+}
+
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.btn--primary {
+  --btn-tint: rgba(224, 163, 74, 0.16);
+  border-color: rgba(224, 163, 74, 0.38);
+  color: var(--brass-bright);
+  text-shadow: 0 0 18px var(--brass-glow);
+}
+.btn--primary:hover:not(:disabled) { --btn-tint: rgba(224, 163, 74, 0.24); }
+
+.btn--mint  { --btn-tint: rgba(95, 184, 168, 0.15); border-color: rgba(95,184,168,0.34); color: var(--mint); }
+.btn--clay  { --btn-tint: rgba(194, 105, 94, 0.15); border-color: rgba(194,105,94,0.34); color: var(--clay); }
+.btn--slate { --btn-tint: rgba(127, 136, 150, 0.14); color: var(--ink-soft); }
+
+.btn--sm { padding: 8px 14px; font-size: 0.82rem; border-radius: var(--r-sm); }
+.btn--lg { padding: 14px 26px; font-size: 0.98rem; }
+.btn--block { width: 100%; }
+
+.btn--on {
+  box-shadow: var(--shadow-pressed), inset 0 0 22px var(--brass-glow);
+  color: var(--brass-bright);
+  border-color: rgba(224, 163, 74, 0.4);
+}
+
+/* ===========================================================================
+   Inputs — recessed wells cut into the panel.
+   =========================================================================== */
+.field {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid transparent;
+  border-radius: var(--r-md);
+  background: var(--panel-well);
+  box-shadow: var(--shadow-well);
+  color: var(--ink);
+  transition: box-shadow 0.16s var(--ease);
+}
+.field::placeholder { color: var(--ink-dim); }
+.field:focus {
+  outline: none;
+  border-color: rgba(224, 163, 74, 0.4);
+  box-shadow: var(--shadow-well), 0 0 0 3px var(--brass-glow);
+}
+textarea.field { resize: vertical; min-height: 120px; line-height: 1.7; }
+select.field { appearance: none; cursor: pointer; }
+
+/* ===========================================================================
+   Chips — filter toggles cut from the same metal.
+   =========================================================================== */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 13px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-pill);
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01));
+  box-shadow: var(--shadow-raised);
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.16s var(--ease);
+  white-space: nowrap;
+}
+.chip:hover { color: var(--ink); transform: translateY(-1px); }
+.chip[aria-pressed='true'] {
+  background: rgba(224, 163, 74, 0.13);
+  border-color: rgba(224, 163, 74, 0.42);
+  box-shadow: var(--shadow-pressed);
+  color: var(--brass-bright);
+}
+.chip__count { color: var(--ink-dim); font-size: 0.68rem; }
+
+.tag {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: var(--r-pill);
+  background: var(--panel-well);
+  box-shadow: var(--shadow-well);
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+}
+
+/* Status dots reuse the signal palette everywhere they appear. The dot
+   carries the colour; the label stays on a neutral ink token, so the state
+   is legible without relying on hue. */
+.status { display: inline-flex; align-items: center; gap: 7px; color: var(--ink-soft); }
+.status::before {
+  content: '';
+  width: 8px; height: 8px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--sig-tone, var(--slate));
+  box-shadow: 0 0 9px var(--sig-tone, var(--slate));
+}
+.status--shortlisted { --sig-tone: var(--sig-good); }
+.status--maybe       { --sig-tone: var(--sig-hold); }
+.status--applied     { --sig-tone: var(--sig-sent); }
+.status--rejected    { --sig-tone: var(--sig-stop); }
+
+/* ===========================================================================
+   Slider — a groove milled into the panel with a knurled thumb.
+   =========================================================================== */
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 26px;
+  background: transparent;
+  cursor: pointer;
+}
+.slider::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: var(--r-pill);
+  background: var(--panel-well);
+  box-shadow: var(--shadow-well);
+}
+.slider::-moz-range-track {
+  height: 8px;
+  border-radius: var(--r-pill);
+  background: var(--panel-well);
+  box-shadow: var(--shadow-well);
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px; height: 22px;
+  margin-top: -7px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: radial-gradient(circle at 34% 28%, var(--brass-bright), var(--brass-deep));
+  box-shadow: 0 3px 8px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.35);
+}
+.slider::-moz-range-thumb {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: radial-gradient(circle at 34% 28%, var(--brass-bright), var(--brass-deep));
+  box-shadow: 0 3px 8px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.35);
+}
+
+/* ===========================================================================
+   Toggle — a rocker switch.
+   =========================================================================== */
+.toggle {
+  position: relative;
+  width: 48px; height: 26px;
+  border-radius: var(--r-pill);
+  background: var(--panel-well);
+  box-shadow: var(--shadow-well);
+  border: none;
+  cursor: pointer;
+  transition: box-shadow 0.2s var(--ease);
+  flex: none;
+}
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, #454b57, #2b2f38);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.14);
+  transition: transform 0.22s var(--ease), background 0.22s var(--ease);
+}
+.toggle[aria-checked='true'] { box-shadow: var(--shadow-well), inset 0 0 14px var(--brass-glow); }
+.toggle[aria-checked='true']::after {
+  transform: translateX(22px);
+  background: radial-gradient(circle at 34% 28%, var(--brass-bright), var(--brass-deep));
+}
+
+/* ===========================================================================
+   Meters — proportional readouts in the analytics deck.
+   =========================================================================== */
+.meter {
+  height: 9px;
+  border-radius: var(--r-pill);
+  background: var(--panel-well);
+  box-shadow: var(--shadow-well);
+  overflow: hidden;
+}
+.meter__fill {
+  height: 100%;
+  border-radius: var(--r-pill);
+  background: linear-gradient(90deg, var(--brass-deep), var(--brass));
+  box-shadow: 0 0 12px var(--brass-glow);
+  transition: width 0.6s var(--ease);
+}
+
+/* ===========================================================================
+   Utilities
+   =========================================================================== */
+.stack   { display: flex; flex-direction: column; }
+.row     { display: flex; align-items: center; }
+.wrap    { flex-wrap: wrap; }
+.gap-4  { gap: 4px; }  .gap-6  { gap: 6px; }  .gap-8  { gap: 8px; }
+.gap-12 { gap: 12px; } .gap-16 { gap: 16px; } .gap-20 { gap: 20px; }
+.gap-24 { gap: 24px; }
+.grow   { flex: 1 1 auto; min-width: 0; }
+.between{ justify-content: space-between; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.muted  { color: var(--ink-soft); }
+.dim    { color: var(--ink-dim); }
+.center { text-align: center; }
+
+.spin {
+  width: 15px; height: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  border-top-color: var(--brass);
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+  flex: none;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+.rise { animation: rise 0.34s var(--ease) both; }
+
+/* ===========================================================================
+   Score gauge — the signature readout, milled into the panel.
+   =========================================================================== */
+.gauge {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--panel-well);
+  box-shadow: var(--shadow-well);
+}
+.gauge svg { position: absolute; inset: 0; }
+.gauge__readout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+  gap: 2px;
+}
+.gauge__value { font-weight: 600; color: var(--ink); }
+.gauge__label { letter-spacing: 0.12em; }
+
+/* ===========================================================================
+   Notices, empty states, skeletons
+   =========================================================================== */
+.notice {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px;
+  border-radius: var(--r-md);
+  background: var(--panel-well);
+  box-shadow: var(--shadow-well);
+  font-size: 0.88rem;
+}
+.notice--error { border-left: 3px solid var(--clay); }
+.notice--info  { border-left: 3px solid var(--brass); }
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 64px 28px;
+  text-align: center;
+}
+.empty__ring {
+  width: 62px; height: 62px;
+  border-radius: 50%;
+  background: var(--panel-well);
+  box-shadow: var(--shadow-well), inset 0 0 26px rgba(224, 163, 74, 0.12);
+}
+
+.skeleton {
+  border-radius: var(--r-lg);
+  background: linear-gradient(100deg, var(--panel) 30%, var(--panel-raised) 50%, var(--panel) 70%);
+  background-size: 240% 100%;
+  box-shadow: var(--shadow-raised);
+  animation: sheen 1.5s ease-in-out infinite;
+}
+@keyframes sheen { to { background-position: -140% 0; } }
+
+/* ===========================================================================
+   Job card — one instrument module on the deck.
+   =========================================================================== */
+.jobcard {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px 22px;
+  color: inherit;
+  transition: transform 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+.jobcard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-raised-lg);
+  color: inherit;
+}
+/* Pressing a module in is the affordance the whole aesthetic is built on. */
+.jobcard:active { transform: translateY(0); box-shadow: var(--shadow-pressed); }
+
+.jobcard__title {
+  font-size: 1.02rem;
+  color: var(--ink);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.jobcard__summary {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.87rem;
+  line-height: 1.55;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+@media (max-width: 620px) {
+  .jobcard { flex-direction: column; gap: 14px; }
+}
+
+/* ===========================================================================
+   Nav rail — the device's side panel, fixed to the left of the deck.
+   =========================================================================== */
+.shell { display: flex; min-height: 100%; }
+
+.rail {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  width: var(--rail-w);
+  height: 100vh;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  padding: 26px 18px;
+  background: linear-gradient(160deg, var(--panel-raised), var(--panel));
+  box-shadow: 7px 0 22px rgba(0, 0, 0, 0.42);
+  border-right: 1px solid var(--hairline);
+  z-index: 10;
+}
+
+.rail__brand { display: flex; align-items: center; gap: 12px; padding: 0 8px; }
+.rail__mark {
+  width: 34px; height: 34px;
+  flex: none;
+  border-radius: 10px;
+  background: radial-gradient(circle at 33% 28%, var(--brass-bright), var(--brass-deep));
+  box-shadow: var(--shadow-raised), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.rail__wordmark {
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.rail__links { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+
+.rail__link {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 11px 14px;
+  border-radius: var(--r-md);
+  color: var(--ink-soft);
+  border: 1px solid transparent;
+  transition: all 0.16s var(--ease);
+}
+.rail__link:hover { color: var(--ink); background: rgba(255, 255, 255, 0.035); }
+.rail__link--on {
+  background: rgba(224, 163, 74, 0.1);
+  border-color: rgba(224, 163, 74, 0.3);
+  box-shadow: var(--shadow-pressed);
+  color: var(--brass-bright);
+}
+.rail__linkLabel { font-family: var(--font-display); font-weight: 600; font-size: 0.95rem; }
+
+.rail__foot {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  border-radius: var(--r-md);
+  background: var(--panel-well);
+  box-shadow: var(--shadow-well);
+}
+
+.main { flex: 1 1 auto; min-width: 0; padding: 32px 34px 72px; }
+.main__inner { max-width: var(--page-max); margin: 0 auto; }
+
+.pagehead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 26px;
+}
+
+@media (max-width: 900px) {
+  .shell { flex-direction: column; }
+  .rail {
+    position: static;
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 18px;
+    overflow-x: auto;
+    box-shadow: 0 7px 22px rgba(0, 0, 0, 0.42);
+  }
+  .rail__links { flex-direction: row; }
+  .rail__link { white-space: nowrap; }
+  .rail__link .engraved { display: none; }
+  .rail__foot { margin-top: 0; margin-left: auto; }
+  .main { padding: 22px 18px 60px; }
+}
+
+/* ===========================================================================
+   Dashboard layout — filter column beside the ranked deck.
+   =========================================================================== */
+.deck { display: grid; grid-template-columns: 300px 1fr; gap: 24px; align-items: start; }
+.filters { position: sticky; top: 24px; max-height: calc(100vh - 48px); overflow-y: auto; }
+.joblist { display: flex; flex-direction: column; gap: 14px; }
+
+@media (max-width: 1050px) {
+  .deck { grid-template-columns: 1fr; }
+  .filters { position: static; max-height: none; }
+}
+
+/* ===========================================================================
+   Job detail
+   =========================================================================== */
+.detail { display: grid; grid-template-columns: 1fr 320px; gap: 24px; align-items: start; }
+
+.description {
+  margin: 0;
+  max-height: 620px;
+  overflow-y: auto;
+  padding: 18px;
+  border-radius: var(--r-md);
+  background: var(--panel-well);
+  box-shadow: var(--shadow-well);
+  color: var(--ink-soft);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1.72;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.breakdown { display: flex; flex-direction: column; gap: 10px; }
+.breakdown__row {
+  display: grid;
+  grid-template-columns: 74px 1fr 42px 34px;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.78rem;
+}
+
+@media (max-width: 1000px) {
+  .detail { grid-template-columns: 1fr; }
+}
+
+.proposal {
+  min-height: 440px;
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+/* ===========================================================================
+   Analytics — stat tiles and magnitude bars.
+   =========================================================================== */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 16px;
+}
+.tile { display: flex; flex-direction: column; gap: 6px; padding: 20px 22px; }
+.tile__value {
+  font-family: var(--font-display);
+  font-size: 2.1rem;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.barlist { display: flex; flex-direction: column; gap: 12px; }
+.barlist__row {
+  display: grid;
+  grid-template-columns: minmax(96px, 150px) 1fr 44px;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.86rem;
+}
+.barlist__row:hover .meter__fill { filter: brightness(1.15); }
+.barlist__name { color: var(--ink-soft); }
+.barlist__value { text-align: right; color: var(--ink); }
+
+@media (max-width: 520px) {
+  .barlist__row { grid-template-columns: 1fr 44px; }
+  .barlist__row .meter { grid-column: 1 / -1; }
+}
+
+/* Hairline separators for grouped controls inside a panel body. */
+.divide-below { padding-bottom: 18px; border-bottom: 1px solid var(--hairline); }
+.divide-above { padding-top: 14px; border-top: 1px solid var(--hairline); }

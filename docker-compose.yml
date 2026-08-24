@@ -1,0 +1,80 @@
+services:
+  db:
+    # pgvector's own image: plain postgres:16 has no `vector` extension.
+    image: pgvector/pgvector:pg16
+    container_name: jobfndr-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-jobfndr}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-jobfndr}
+      POSTGRES_DB: ${POSTGRES_DB:-jobfndr}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      # Exposed only so you can inspect the DB with psql from the host.
+      - "${POSTGRES_PORT:-5433}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-jobfndr} -d ${POSTGRES_DB:-jobfndr}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks: [jobfndr]
+
+  backend:
+    build:
+      context: ./backend
+    container_name: jobfndr-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-jobfndr}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-jobfndr}
+      POSTGRES_DB: ${POSTGRES_DB:-jobfndr}
+      # Service name, not localhost: the backend reaches Postgres over the
+      # compose network.
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      LLM_PROVIDER: ${LLM_PROVIDER:-anthropic}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LLM_MODEL: ${LLM_MODEL:-claude-opus-5}
+      RULE_WEIGHT: ${RULE_WEIGHT:-0.4}
+      SEMANTIC_WEIGHT: ${SEMANTIC_WEIGHT:-0.6}
+      RESPECT_ROBOTS: ${RESPECT_ROBOTS:-true}
+      CV_STORAGE_DIR: /data/cv
+      HF_HOME: /models
+      OPERATOR_NAME: ${OPERATOR_NAME:-Me}
+      OPERATOR_EMAIL: ${OPERATOR_EMAIL:-}
+      OPERATOR_LOCATION: ${OPERATOR_LOCATION:-}
+      MANUAL_EXPERIENCE_FILE: /config/manual_experience.json
+    volumes:
+      - cvdata:/data/cv
+      - models:/models
+      # Optional: roles your CV PDF does not list (see README). Read-only —
+      # it is configuration, and it must not nest under the cvdata volume.
+      - ./data:/config:ro
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    networks: [jobfndr]
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        # Same-origin: nginx inside this container proxies /api to the backend
+        # service. The browser never needs to resolve the Docker hostname.
+        VITE_API_BASE: /api
+    container_name: jobfndr-frontend
+    depends_on:
+      - backend
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    networks: [jobfndr]
+
+volumes:
+  pgdata:
+  cvdata:
+  models:
+
+networks:
+  jobfndr:
+    driver: bridge

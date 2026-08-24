@@ -1,0 +1,72 @@
+/* JobFndr design tokens — a machined instrument deck.
+   Neumorphism needs a mid-dark base: on pure black the light shadow vanishes
+   and the whole surface reads flat. Everything here is built on --panel. */
+
+:root {
+  /* --- Surfaces --------------------------------------------------------- */
+  --deck:         #1b1e24;  /* the desk the panels sit on */
+  --panel:        #23262e;  /* standard raised panel */
+  --panel-raised: #282c35;  /* lifted / hovered */
+  --panel-well:   #1e2128;  /* recessed wells: inputs, tracks, readouts */
+  --hairline:     rgba(255, 255, 255, 0.06);
+
+  /* --- Neumorphic shadow pair -------------------------------------------
+     Light source sits top-left, consistently, on every surface. */
+  --lift:  rgba(255, 255, 255, 0.045);
+  --drop:  rgba(0, 0, 0, 0.55);
+
+  --shadow-raised:
+      -5px -5px 12px var(--lift),
+       6px  7px 16px var(--drop);
+  --shadow-raised-lg:
+      -7px -7px 18px var(--lift),
+       9px 11px 26px var(--drop);
+  --shadow-pressed:
+      inset -3px -3px 8px var(--lift),
+      inset  4px  5px 10px var(--drop);
+  --shadow-well:
+      inset  4px  5px 11px var(--drop),
+      inset -3px -3px 8px  var(--lift);
+
+  /* --- Brass: the instrument accent ------------------------------------- */
+  --brass:        #e0a34a;
+  --brass-bright: #f2bd6d;
+  --brass-deep:   #a8762e;
+  --brass-glow:   rgba(224, 163, 74, 0.22);
+
+  /* --- Signal palette ---------------------------------------------------
+     Status colours, reserved: they mark state and are never reused as a
+     series colour. Validated against the --panel surface in dark mode —
+     all four sit inside OKLCH L 0.48-0.67, clear the chroma floor, and hold
+     >=3:1 contrast with adjacent-pair CVD separation >=10.8. They always
+     ship beside their label, so colour never carries the meaning alone. */
+  --sig-good: #1f9e82;  /* shortlisted */
+  --sig-hold: #c2871f;  /* maybe */
+  --sig-sent: #6a86ea;  /* applied */
+  --sig-stop: #d94f3c;  /* rejected */
+
+  --mint:   var(--sig-good);
+  --clay:   var(--sig-stop);
+  --violet: var(--sig-sent);
+  --slate:  #7f8896;   /* neutral UI grey — chrome only, never a data colour */
+
+  /* --- Type ------------------------------------------------------------- */
+  --ink:      #e8eaef;
+  --ink-soft: #a2a9b6;
+  --ink-dim:  #6d7583;
+
+  --font-display: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --font-body:    'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --font-mono:    'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* --- Geometry --------------------------------------------------------- */
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-pill: 999px;
+
+  --rail-w: 232px;
+  --page-max: 1320px;
+
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
